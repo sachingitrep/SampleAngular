@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DatingApp.API.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace DatingApp.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
@@ -22,10 +24,11 @@ namespace DatingApp.API.Controllers
             _dataContext = dataContext;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> Get()
         {            
-            var data = await _dataContext.weatherForecasts.ToArrayAsync();
+            var data = await _dataContext.WeatherForecasts.ToArrayAsync();
             return this.Ok(data);
         }
 
@@ -33,7 +36,7 @@ namespace DatingApp.API.Controllers
         
         public async Task<IActionResult> Get(int id)
         {            
-            var data = await _dataContext.weatherForecasts.Where(x => x.Id == id).FirstOrDefaultAsync();
+            var data = await _dataContext.WeatherForecasts.Where(x => x.Id == id).FirstOrDefaultAsync();
             return this.Ok(data);
         }
     }
